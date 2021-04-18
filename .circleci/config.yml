@@ -1,0 +1,56 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/golang:1.12.9
+    environment:
+      GO111MODULE: "on"
+
+    working_directory: /go/src/github.com/pcherednichenko/spam_fighter_bot
+    steps:
+      - checkout
+      - run: wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.23.1
+      - run: go test -v ./...
+      - run: golangci-lint run
+      - run: go build ./cmd/spam_fighter_bot/spam_fighter_bot.go
+
+  deploy:
+    docker:
+      - image: golang:1.14.3-alpine3.11
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Install doctl
+          command: |
+            apk update
+            apk add docker
+            apk add ca-certificates
+            update-ca-certificates
+            apk add openssl
+            cd ~
+            wget https://github.com/digitalocean/doctl/releases/download/v1.43.0/doctl-1.43.0-linux-amd64.tar.gz
+            tar xf ~/doctl-1.43.0-linux-amd64.tar.gz
+            mv ~/doctl /usr/local/bin
+      - run:
+          name: Auth to registry
+          command: |
+            doctl registry login -t $docker_key -v true
+      - run:
+          name: Build application Docker image
+          command: |
+            docker build -t $docker_registry/spam_fighter_bot:production-${CIRCLE_SHA1} .
+      - run:
+          name: Push image to registry
+          command: |
+            docker push $docker_registry/spam_fighter_bot:production-${CIRCLE_SHA1}
+
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - build
+      - deploy:
+          filters:
+            branches:
+              only: main
