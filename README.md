@@ -19,3 +19,7 @@ with it. So I decided to create this bot
 - [CMD start file](./cmd/spam_fighter_bot/spam_fighter_bot)
 - [Welcome message logic](./internal/handler/userJoined.go)
 - [Checking correct answer](./internal/handler/text.go)
+
+### Article about this bot
+
+https://blogpavel.com/2021/04/23/spam-fighter-bot/
