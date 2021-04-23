@@ -8,6 +8,8 @@ spammers solve English captcha manually and then write ads. At the same
 time, other bots contained too much unnecessary information and filled chat
 with it. So I decided to create this bot
 
+**Link to the bot**: https://t.me/spam_fighter_bot
+
 ## Example
 
 ![example](/.github/example.png)
