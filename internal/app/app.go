@@ -22,9 +22,12 @@ func StartBot(l *zap.SugaredLogger, token string) {
 
 	memoryStorage := data.NewMemoryStorage()
 
+	// Handle main message about joined user
 	b.Handle(tb.OnUserJoined, handler.UserJoined(l, b, memoryStorage))
+	// Handle text message from user with possible answer
 	b.Handle(tb.OnText, handler.Text(l, b, memoryStorage))
 
+	// Block other messages with pictures and etc before user solve question
 	b.Handle(tb.OnPhoto, handler.Other(l, b, memoryStorage))
 	b.Handle(tb.OnAudio, handler.Other(l, b, memoryStorage))
 	b.Handle(tb.OnAnimation, handler.Other(l, b, memoryStorage))

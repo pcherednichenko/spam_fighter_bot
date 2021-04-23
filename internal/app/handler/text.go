@@ -4,9 +4,10 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/pcherednichenko/spam_fighter_bot/internal/app/data"
 	"go.uber.org/zap"
 	tb "gopkg.in/tucnak/telebot.v2"
+
+	"github.com/pcherednichenko/spam_fighter_bot/internal/app/data"
 )
 
 func Text(l *zap.SugaredLogger, b *tb.Bot, s data.Storage) func(m *tb.Message) {
