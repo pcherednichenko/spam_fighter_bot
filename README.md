@@ -23,3 +23,9 @@ with it. So I decided to create this bot
 ### Article about this bot
 
 https://blogpavel.com/2021/04/23/spam-fighter-bot/
+
+### Did you like it?
+
+If you like this bot and you use it put a star :star: , I will be pleased.
+
+The bot is free, no ads, open source available for everyone :heart:
