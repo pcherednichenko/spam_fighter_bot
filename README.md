@@ -1,5 +1,7 @@
 # Spam-fighter-bot
 
+![pcherednichenko](https://circleci.com/gh/pcherednichenko/spam_fighter_bot.svg?style=svg)
+
 ## Overview
 
 This bot is used to verify that the user who entered the chat is not a bot
