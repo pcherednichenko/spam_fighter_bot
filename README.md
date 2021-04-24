@@ -18,9 +18,9 @@ with it. So I decided to create this bot
 
 ### Project Navigation
 
-- [CMD start file](./cmd/spam_fighter_bot/spam_fighter_bot)
-- [Welcome message logic](./internal/handler/userJoined.go)
-- [Checking correct answer](./internal/handler/text.go)
+- [CMD start file](./cmd/spam_fighter_bot/spam_fighter_bot.go)
+- [Welcome message logic](./internal/app/handler/userJoined.go)
+- [Checking correct answer](./internal/app/handler/text.go)
 
 ### Article about this bot
 
