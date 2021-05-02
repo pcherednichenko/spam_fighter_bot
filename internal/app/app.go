@@ -13,8 +13,9 @@ import (
 func StartBot(l *zap.SugaredLogger, token string) {
 	// initialize bot
 	b, err := tb.NewBot(tb.Settings{
-		Token:  token,
-		Poller: &tb.LongPoller{Timeout: 10 * time.Second},
+		Token:       token,
+		Synchronous: false, // running handlers in parallel
+		Poller:      &tb.LongPoller{Timeout: 10 * time.Second},
 	})
 	if err != nil {
 		l.Fatal("error while initializing bot", err)
