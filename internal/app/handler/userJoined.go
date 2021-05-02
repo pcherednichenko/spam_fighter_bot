@@ -66,14 +66,13 @@ func checkAndBanUser(l *zap.SugaredLogger, b *tb.Bot, welcomeMessage *tb.Message
 }
 
 func getUsername(u *tb.User) string {
-	username := ""
 	if u.Username != "" {
-		username = "@" + u.Username
-	} else {
-		username = u.FirstName
-		if u.LastName != "" {
-			username = username + u.LastName
-		}
+		return "@" + u.Username
+	}
+	username := ""
+	username = u.FirstName
+	if u.LastName != "" {
+		username = username + u.LastName
 	}
 	return username
 }
