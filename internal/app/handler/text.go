@@ -3,6 +3,7 @@ package handler
 import (
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 
 	"go.uber.org/zap"
@@ -34,6 +35,10 @@ func Text(l *zap.SugaredLogger, b *tb.Bot, s data.Storage) func(m *tb.Message) {
 		// imitation of real typing delays
 		time.Sleep(time.Second * 2)
 		tellUsText := fmt.Sprintf("%s расскажите нам о себе 🙂", getUsername(m.Sender))
+		if strings.Contains(m.Chat.Title, "Амстердам") {
+			// Additional text for chat tell us message
+			tellUsText = tellUsText + ". Чем занимаетесь в Амстердаме?"
+		}
 		tellUsMessage, err := b.Send(m.Chat, tellUsText)
 		if err != nil {
 			l.Errorf("error while sending: %v", err)
@@ -59,7 +64,7 @@ func deleteWelcomeMessages(l *zap.SugaredLogger, b *tb.Bot,
 		l.Errorf("error while deleting welcome message after approve: %v", err)
 	}
 	// delay before deleting second welcome message
-	time.Sleep(time.Minute)
+	time.Sleep(time.Second * 90)
 	err = b.Delete(tellUsMessage)
 	if err != nil {
 		l.Errorf("error while deleting tell us about yourself message after approve: %v", err)
