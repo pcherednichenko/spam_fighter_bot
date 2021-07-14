@@ -22,14 +22,14 @@ func UserJoined(l *zap.SugaredLogger, b *tb.Bot, s data.Storage) func(m *tb.Mess
 		fistNumberInWords := ntw.IntegerToRuRu(firstNumber)
 		secondNumberInWords := ntw.IntegerToRuRu(secondNumber)
 
-		username := getUsername(m.Sender)
+		username := getUsername(m.UserJoined)
 		welcomeMessageText := getWelcomeMessageText(username, m.Chat.Title, fistNumberInWords, secondNumberInWords)
 		welcomeMessage, err := b.Send(m.Chat, welcomeMessageText)
 		if err != nil {
 			l.Error("error while sending welcome message", err)
 			return
 		}
-		s.Add(m.Chat, m.Sender, data.Info{WelcomeMessage: welcomeMessage, RightAnswer: firstNumber * secondNumber})
+		s.Add(m.Chat, m.UserJoined, data.Info{WelcomeMessage: welcomeMessage, RightAnswer: firstNumber * secondNumber})
 
 		// Goroutine to delete message after 2 minutes
 		// and block user if he or she still in the list
@@ -44,8 +44,8 @@ func checkAndBanUser(l *zap.SugaredLogger, b *tb.Bot, welcomeMessage *tb.Message
 		// maybe message already deleted because of correct answer
 		l.Warnf("error while deleting welcome message after time: %v", err)
 	}
-	if _, ok := s.Exist(m.Chat, m.Sender); ok {
-		userToBan, err := b.ChatMemberOf(m.Chat, m.Sender)
+	if _, ok := s.Exist(m.Chat, m.UserJoined); ok {
+		userToBan, err := b.ChatMemberOf(m.Chat, m.UserJoined)
 		if err != nil {
 			l.Errorf("error while banning user: %v", err)
 		}
@@ -72,7 +72,7 @@ func getUsername(u *tb.User) string {
 	username := ""
 	username = u.FirstName
 	if u.LastName != "" {
-		username = username + u.LastName
+		username = username + " " + u.LastName
 	}
 	return username
 }

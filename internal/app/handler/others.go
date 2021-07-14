@@ -9,7 +9,7 @@ import (
 
 func Other(l *zap.SugaredLogger, b *tb.Bot, s data.Storage) func(m *tb.Message) {
 	return func(m *tb.Message) {
-		if _, ok := s.Exist(m.Chat, m.Sender); !ok {
+		if _, ok := s.Exist(m.Chat, m.UserJoined); !ok {
 			return
 		}
 		err := b.Delete(m)

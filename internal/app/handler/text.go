@@ -14,7 +14,7 @@ import (
 
 func Text(l *zap.SugaredLogger, b *tb.Bot, s data.Storage) func(m *tb.Message) {
 	return func(m *tb.Message) {
-		info, ok := s.Exist(m.Chat, m.Sender)
+		info, ok := s.Exist(m.Chat, m.UserJoined)
 		if !ok {
 			return
 		}
@@ -26,7 +26,7 @@ func Text(l *zap.SugaredLogger, b *tb.Bot, s data.Storage) func(m *tb.Message) {
 			return
 		}
 		// in case of correct answer:
-		s.Remove(m.Chat, m.Sender)
+		s.Remove(m.Chat, m.UserJoined)
 		// Correct! Tell us about yourself
 		approveMessage, err := b.Send(m.Chat, "Верно!")
 		if err != nil {
@@ -34,10 +34,10 @@ func Text(l *zap.SugaredLogger, b *tb.Bot, s data.Storage) func(m *tb.Message) {
 		}
 		// imitation of real typing delays
 		time.Sleep(time.Second * 2)
-		tellUsText := fmt.Sprintf("%s расскажите нам о себе 🙂", getUsername(m.Sender))
+		tellUsText := fmt.Sprintf("%s расскажите нам о себе 🙂", getUsername(m.UserJoined))
 		if strings.Contains(m.Chat.Title, "Амстердам") {
 			// Additional text for chat tell us message
-			tellUsText = tellUsText + ". Чем занимаетесь в Амстердаме?"
+			tellUsText += " Чем занимаетесь в Амстердаме?"
 		}
 		tellUsMessage, err := b.Send(m.Chat, tellUsText)
 		if err != nil {
