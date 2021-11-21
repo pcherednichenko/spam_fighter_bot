@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 	"time"
+	"unicode"
 
 	"go.uber.org/zap"
 	tb "gopkg.in/tucnak/telebot.v2"
@@ -19,18 +20,20 @@ func UserJoined(l *zap.SugaredLogger, b *tb.Bot, s data.Storage) func(m *tb.Mess
 		// generating two random small number
 		firstNumber := r.Intn(4) + 1
 		secondNumber := r.Intn(4) + 1
-		fistNumberInWords := ntw.IntegerToRuRu(firstNumber)
-		secondNumberInWords := ntw.IntegerToRuRu(secondNumber)
+		fistNumberInWordsRu := ntw.IntegerToRuRu(firstNumber)
+		fistNumberInWordsEn := ntw.IntegerToEnUs(firstNumber)
+		secondNumberInWordsRu := ntw.IntegerToRuRu(secondNumber)
+		secondNumberInWordsEn := ntw.IntegerToEnUs(secondNumber)
 
 		username := getUsername(m.UserJoined)
-		welcomeMessageText := getWelcomeMessageText(username, m.Chat.Title, fistNumberInWords, secondNumberInWords)
+		welcomeMessageText := getWelcomeMessageText(username, m.Chat.Title,
+			fistNumberInWordsEn, secondNumberInWordsEn, fistNumberInWordsRu, secondNumberInWordsRu)
 		welcomeMessage, err := b.Send(m.Chat, welcomeMessageText)
 		if err != nil {
 			l.Error("error while sending welcome message", err)
 			return
 		}
 		s.Add(m.Chat, m.UserJoined, data.Info{WelcomeMessage: welcomeMessage, RightAnswer: firstNumber * secondNumber})
-
 		// Goroutine to delete message after 2 minutes
 		// and block user if he or she still in the list
 		go checkAndBanUser(l, b, welcomeMessage, s, m, username)
@@ -77,11 +80,28 @@ func getUsername(u *tb.User) string {
 	return username
 }
 
-func getWelcomeMessageText(username, chatName, fistNumberInWords, secondNumberInWords string) string {
+func getWelcomeMessageText(username, chatName,
+	fistNumberInWordsEn, secondNumberInWordsEn, fistNumberInWordsRu, secondNumberInWordsRu string) string {
 	// Welcome to the chat of Russian-speaking people in Amsterdam!
 	// Write the number as: %s multiply by %s to check that you are not a bot
+	firstNumText, secondNumText := fistNumberInWordsEn, secondNumberInWordsEn
+	welcomeText := "%s Welcome to chat %s! " +
+		"Write your answer in number how much is %s multiplied by %s to check that you are not a bot"
+	if chatNameContainsCyrillic(chatName) {
+		firstNumText, secondNumText = fistNumberInWordsRu, secondNumberInWordsRu
+		welcomeText = "%s Добро пожаловать в чат %s! " +
+			"Напишите числом сколько будет: %s умножить на %s, чтобы проверить, что вы не бот"
+	}
 	return fmt.Sprintf(
-		"%s Добро пожаловать в чат %s! "+
-			"Напишите числом сколько будет: %s умножить на %s, чтобы проверить, что вы не бот",
-		username, chatName, fistNumberInWords, secondNumberInWords)
+		welcomeText,
+		username, chatName, firstNumText, secondNumText)
+}
+
+func chatNameContainsCyrillic(chatName string) bool {
+	for _, char := range []rune(chatName) {
+		if unicode.Is(unicode.Cyrillic, char) {
+			return true
+		}
+	}
+	return false
 }

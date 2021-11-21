@@ -28,13 +28,19 @@ func Text(l *zap.SugaredLogger, b *tb.Bot, s data.Storage) func(m *tb.Message) {
 		// in case of correct answer:
 		s.Remove(m.Chat, m.Sender)
 		// Correct! Tell us about yourself
-		approveMessage, err := b.Send(m.Chat, "Верно!")
+		correctText := "Correct!"
+		tellUsAboutYourselfText := "%s tell us about yourself 🙂"
+		if chatNameContainsCyrillic(m.Chat.Title) {
+			correctText = "Верно!"
+			tellUsAboutYourselfText = "%s расскажите нам о себе 🙂"
+		}
+		approveMessage, err := b.Send(m.Chat, correctText)
 		if err != nil {
 			l.Errorf("error while sending: %v", err)
 		}
 		// imitation of real typing delays
 		time.Sleep(time.Second * 2)
-		tellUsText := fmt.Sprintf("%s расскажите нам о себе 🙂", getUsername(m.Sender))
+		tellUsText := fmt.Sprintf(tellUsAboutYourselfText, getUsername(m.Sender))
 		if strings.Contains(m.Chat.Title, "Амстердам") {
 			// Additional text for chat tell us message
 			tellUsText += " Чем занимаетесь в Амстердаме?"
