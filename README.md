@@ -16,6 +16,8 @@ with it. So I decided to create this bot
 
 ![example](/.github/example.png)
 
+![example_en](/.github/example-en.png)
+
 ### Project Navigation
 
 - [CMD start file](./cmd/spam_fighter_bot/spam_fighter_bot.go)
