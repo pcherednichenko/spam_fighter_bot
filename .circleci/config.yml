@@ -9,7 +9,7 @@ jobs:
     working_directory: /go/src/github.com/pcherednichenko/spam_fighter_bot
     steps:
       - checkout
-      - run: wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.43.0
+      - run: wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.43.0
       - run: go test -v ./...
       - run: golangci-lint run
       - run: go build ./cmd/spam_fighter_bot/spam_fighter_bot.go
