@@ -16,8 +16,7 @@ func Text(l *zap.SugaredLogger, b *tb.Bot, s data.Storage) func(m *tb.Message) {
 	return func(m *tb.Message) {
 		writeBotStatistic(l, m.Chat.ID, m.Chat.Title)
 		if m.Private() {
-			_, err := b.Send(m.Chat, "Just add me to the chat, make me an admin"+
-				" and grant the rights to delete messages and ban spam users")
+			err := sendPrivateMessageResponse(b, m)
 			if err != nil {
 				l.Errorf("error while sending private message response: %v", err)
 			}
@@ -84,4 +83,20 @@ func deleteWelcomeMessages(l *zap.SugaredLogger, b *tb.Bot,
 	if err != nil {
 		l.Errorf("error while deleting tell us about yourself message after approve: %v", err)
 	}
+}
+
+func sendPrivateMessageResponse(b *tb.Bot, m *tb.Message) error {
+	_, err := b.Send(m.Chat, "Hello! Just add me to the chat, make me an admin"+
+		" and grant the rights to delete messages and ban spam users. "+
+		"I hope you enjoy my work! 😉")
+	if err != nil {
+		return err
+	}
+	time.Sleep(time.Second * 2)
+	_, err = b.Send(m.Chat, "By the way you can find my source code here: "+
+		"https://github.com/pcherednichenko/spam_fighter_bot")
+	if err != nil {
+		return err
+	}
+	return nil
 }
