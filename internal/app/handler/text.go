@@ -14,6 +14,15 @@ import (
 
 func Text(l *zap.SugaredLogger, b *tb.Bot, s data.Storage) func(m *tb.Message) {
 	return func(m *tb.Message) {
+		writeBotStatistic(l, m.Chat.ID, m.Chat.Title)
+		if m.Private() {
+			_, err := b.Send(m.Chat, "Just add me to the chat, make me an admin"+
+				" and grant the rights to delete messages and ban spam users")
+			if err != nil {
+				l.Errorf("error while sending private message response: %v", err)
+			}
+			return
+		}
 		info, ok := s.Exist(m.Chat, m.Sender)
 		if !ok {
 			return
