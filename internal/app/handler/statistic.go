@@ -14,6 +14,9 @@ var lock = sync.RWMutex{}
 func writeBotStatistic(l *zap.SugaredLogger, chatID int64, chatTitle string) {
 	lock.Lock()
 	defer lock.Unlock()
+	if activeChats == nil {
+		activeChats = make(map[int64]string)
+	}
 	activeChats[chatID] = chatTitle
 	times++
 	if times == 200 {
