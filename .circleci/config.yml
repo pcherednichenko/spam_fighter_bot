@@ -16,7 +16,7 @@ jobs:
 
   deploy:
     docker:
-      - image: golang:1.16-alpine3.11
+      - image: alpine:3.14
     steps:
       - checkout
       - setup_remote_docker
