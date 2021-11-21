@@ -16,7 +16,7 @@ with it. So I decided to create this bot
 
 ![example](/.github/example.png)
 
-![example_en](/.github/example-en.png)
+![example_en](/.github/example-en.jpg)
 
 ### Project Navigation
 
