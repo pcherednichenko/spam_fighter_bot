@@ -3,6 +3,7 @@ package handler
 import (
 	"fmt"
 	"math/rand"
+	"strings"
 	"time"
 	"unicode"
 
@@ -45,12 +46,14 @@ func checkAndBanUser(l *zap.SugaredLogger, b *tb.Bot, welcomeMessage *tb.Message
 	err := b.Delete(welcomeMessage)
 	if err != nil {
 		// maybe message already deleted because of correct answer
-		l.Warnf("error while deleting welcome message after time: %v", err)
+		if !strings.Contains(err.Error(), "message to delete not found") {
+			l.Errorf("error while deleting welcome message after time: %v", err)
+		}
 	}
 	if _, ok := s.Exist(m.Chat, m.UserJoined); ok {
 		userToBan, err := b.ChatMemberOf(m.Chat, m.UserJoined)
 		if err != nil {
-			l.Errorf("error while banning user: %v", err)
+			l.Errorf("error while banning user, chat title: %s, error: %v", m.Chat.Title, err)
 		}
 		err = b.Restrict(m.Chat, userToBan)
 		if err != nil {

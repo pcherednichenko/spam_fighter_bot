@@ -24,7 +24,7 @@ func writeBotStatistic(l *zap.SugaredLogger, chatID int64, chatTitle string) {
 		for chatID, chatTitle := range activeChats {
 			infoText = infoText + fmt.Sprintf("\nchat id: %d, chat title: %s", chatID, chatTitle)
 		}
-		l.Infof(infoText)
+		l.Info(infoText)
 		times = 0
 	}
 }
