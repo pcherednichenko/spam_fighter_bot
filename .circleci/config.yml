@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/golang:1.12.9
+      - image: circleci/golang:1.16
     environment:
       GO111MODULE: "on"
 
@@ -16,7 +16,7 @@ jobs:
 
   deploy:
     docker:
-      - image: golang:1.14.3-alpine3.11
+      - image: golang:1.16-alpine3.11
     steps:
       - checkout
       - setup_remote_docker
