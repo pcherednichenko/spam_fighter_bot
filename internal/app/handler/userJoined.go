@@ -98,7 +98,7 @@ func getWelcomeMessageText(username, chatName,
 }
 
 func chatNameContainsCyrillic(chatName string) bool {
-	for _, char := range []rune(chatName) {
+	for _, char := range chatName {
 		if unicode.Is(unicode.Cyrillic, char) {
 			return true
 		}
