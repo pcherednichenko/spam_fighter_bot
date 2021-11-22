@@ -14,7 +14,6 @@ import (
 
 func Text(l *zap.SugaredLogger, b *tb.Bot, s data.Storage) func(m *tb.Message) {
 	return func(m *tb.Message) {
-		writeBotStatistic(l, m.Chat.ID, m.Chat.Title)
 		if m.Private() {
 			err := sendPrivateMessageResponse(b, m)
 			if err != nil {
@@ -22,11 +21,12 @@ func Text(l *zap.SugaredLogger, b *tb.Bot, s data.Storage) func(m *tb.Message) {
 			}
 			return
 		}
+		writeBotStatistic(l, m.Chat.ID, m.Chat.Title)
 		info, ok := s.Exist(m.Chat, m.Sender)
 		if !ok {
 			return
 		}
-		if m.Text != strconv.Itoa(info.RightAnswer) {
+		if strings.TrimSpace(m.Text) != strconv.Itoa(info.RightAnswer) {
 			err := b.Delete(m)
 			if err != nil {
 				l.Errorf("error while deleting (spam) user message: %v", err)

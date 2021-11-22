@@ -57,15 +57,15 @@ func checkAndBanUser(l *zap.SugaredLogger, b *tb.Bot, welcomeMessage *tb.Message
 		}
 		err = b.Restrict(m.Chat, userToBan)
 		if err != nil {
-			l.Errorf("error while restricting user: %v", err)
+			l.Errorf("error while restricting user, chat title: %s, error: %v", m.Chat.Title, err)
 		}
 		err = b.Ban(m.Chat, userToBan)
 		if err != nil {
-			l.Errorf("error while ban: %v", err)
+			l.Errorf("error while ban, chat title: %s, error: %v", m.Chat.Title, err)
 		}
 		err = b.Delete(m)
 		if err != nil {
-			l.Errorf("error while deleting joining message: %v", err)
+			l.Errorf("error while deleting joining message, chat title: %s, error: %v", m.Chat.Title, err)
 		}
 		l.Infof("Banned: %s", username)
 	}
