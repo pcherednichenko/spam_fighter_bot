@@ -87,14 +87,12 @@ func deleteWelcomeMessages(l *zap.SugaredLogger, b *tb.Bot,
 
 func sendPrivateMessageResponse(b *tb.Bot, m *tb.Message) error {
 	_, err := b.Send(m.Chat, "Hello! Just add me to the chat, make me an admin"+
-		" and grant the rights to delete messages and ban spam users. "+
-		"I hope you enjoy my work! 😉")
+		" and grant the rights to delete messages and ban spam users")
 	if err != nil {
 		return err
 	}
-	time.Sleep(time.Second * 2)
-	_, err = b.Send(m.Chat, "By the way you can find my source code here: "+
-		"https://github.com/pcherednichenko/spam_fighter_bot")
+	time.Sleep(time.Second * 3)
+	_, err = b.Send(m.Chat, "I hope you enjoy my work! 😉")
 	if err != nil {
 		return err
 	}
