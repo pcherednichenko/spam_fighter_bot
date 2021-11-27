@@ -26,6 +26,9 @@ func UserJoined(l *zap.SugaredLogger, b *tb.Bot, s data.Storage) func(m *tb.Mess
 		secondNumberInWordsRu := ntw.IntegerToRuRu(secondNumber)
 		secondNumberInWordsEn := ntw.IntegerToEnUs(secondNumber)
 
+		if excludedUser(m.UserJoined) {
+			return
+		}
 		username := getUsername(m.UserJoined)
 		welcomeMessageText := getWelcomeMessageText(username, m.Chat.Title,
 			fistNumberInWordsEn, secondNumberInWordsEn, fistNumberInWordsRu, secondNumberInWordsRu)
@@ -39,6 +42,17 @@ func UserJoined(l *zap.SugaredLogger, b *tb.Bot, s data.Storage) func(m *tb.Mess
 		// and block user if he or she still in the list
 		go checkAndBanUser(l, b, welcomeMessage, s, m, username)
 	}
+}
+
+func excludedUser(u *tb.User) bool {
+	// we trust this bot
+	if u.Username == "shieldy_bot" {
+		return true
+	}
+	if u.Username == "combot" {
+		return true
+	}
+	return false
 }
 
 func checkAndBanUser(l *zap.SugaredLogger, b *tb.Bot, welcomeMessage *tb.Message, s data.Storage, m *tb.Message, username string) {
