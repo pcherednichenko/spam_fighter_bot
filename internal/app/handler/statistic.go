@@ -8,21 +8,21 @@ import (
 )
 
 var times int
-var activeChats map[string]string
+var activeChats map[string]int64
 var lock = sync.RWMutex{}
 
-func writeBotStatistic(l *zap.SugaredLogger, chatTitle, link string) {
+func writeBotStatistic(l *zap.SugaredLogger, chatTitle string, chatID int64) {
 	lock.Lock()
 	defer lock.Unlock()
 	if activeChats == nil {
-		activeChats = make(map[string]string)
+		activeChats = make(map[string]int64)
 	}
-	activeChats[chatTitle] = link
+	activeChats[chatTitle] = chatID
 	times++
 	if times == 200 {
 		infoText := "Current active chats:"
-		for title, link := range activeChats {
-			infoText = infoText + fmt.Sprintf("  Chat title: %s, chat link: %s  ", title, link)
+		for title, id := range activeChats {
+			infoText = infoText + fmt.Sprintf("  Chat title: %s, chat link: %d  ", title, id)
 		}
 		l.Info(infoText)
 		times = 0
