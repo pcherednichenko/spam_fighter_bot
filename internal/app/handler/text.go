@@ -21,7 +21,9 @@ func Text(l *zap.SugaredLogger, b *tb.Bot, s data.Storage) func(m *tb.Message) {
 			}
 			return
 		}
-		writeBotStatistic(l, m.Chat.Title, m.Chat.ID)
+		if m.Chat != nil {
+			writeBotStatistic(l, m.Chat.Title, m.Chat.ID)
+		}
 		info, ok := s.Exist(m.Chat, m.Sender)
 		if !ok {
 			return
