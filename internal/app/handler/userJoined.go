@@ -68,6 +68,11 @@ func checkAndBanUser(l *zap.SugaredLogger, b *tb.Bot, welcomeMessage *tb.Message
 		userToBan, err := b.ChatMemberOf(m.Chat, m.UserJoined)
 		if err != nil {
 			l.Errorf("error while banning user, chat title: %s, error: %v", m.Chat.Title, err)
+			return
+		}
+		if userToBan == nil {
+			l.Errorf("error while restricting user, chat title: %s, error: %v", m.Chat.Title, err)
+			return
 		}
 		err = b.Restrict(m.Chat, userToBan)
 		if err != nil {
