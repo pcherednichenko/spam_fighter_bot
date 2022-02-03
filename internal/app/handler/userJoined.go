@@ -107,8 +107,9 @@ func getWelcomeMessageText(username, chatName,
 	// Welcome to the chat of Russian-speaking people in Amsterdam!
 	// Write the number as: %s multiply by %s to check that you are not a bot
 	firstNumText, secondNumText := fistNumberInWordsEn, secondNumberInWordsEn
-	welcomeText := "%s Welcome to chat %s! " +
-		"Write your answer in number how much is %s multiplied by %s to check that you are not a bot"
+	welcomeText := "Hi %s, welcome to the %s! " +
+		"To make sure that you aren't a bot, please answer " +
+		"the following question by replying with the result as a number: %s"
 	if chatNameContainsCyrillic(chatName) {
 		firstNumText, secondNumText = fistNumberInWordsRu, secondNumberInWordsRu
 		welcomeText = "%s Добро пожаловать в чат %s! " +
