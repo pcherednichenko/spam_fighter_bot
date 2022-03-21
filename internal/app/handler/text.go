@@ -81,6 +81,10 @@ func deleteWelcomeMessages(l *zap.SugaredLogger, b *tb.Bot,
 	}
 	// delay before deleting second welcome message
 	time.Sleep(time.Second * 90)
+	if tellUsMessage == nil {
+		l.Errorf("error while deleting tell us message: %v", err)
+		return
+	}
 	err = b.Delete(tellUsMessage)
 	if err != nil {
 		l.Errorf("error while deleting tell us about yourself message after approve: %v", err)
