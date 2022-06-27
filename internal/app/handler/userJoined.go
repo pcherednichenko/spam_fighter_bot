@@ -28,6 +28,9 @@ func UserJoined(l *zap.SugaredLogger, b *tb.Bot, s data.Storage) func(m *tb.Mess
 		secondNumberInWordsRu := ntw.IntegerToRuRu(secondNumber)
 		secondNumberInWordsEn := ntw.IntegerToEnUs(secondNumber)
 
+		if excludedChat(m.Chat) {
+			return
+		}
 		if excludedUser(m.UserJoined) {
 			return
 		}
@@ -53,6 +56,19 @@ func excludedUser(u *tb.User) bool {
 	}
 	if u.Username == "combot" {
 		return true
+	}
+	return false
+}
+
+var excludedIDs = []int64{
+	-1001526889445,
+}
+
+func excludedChat(c *tb.Chat) bool {
+	for _, exID := range excludedIDs {
+		if c.ID == exID {
+			return true
+		}
 	}
 	return false
 }
