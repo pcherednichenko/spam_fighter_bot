@@ -62,6 +62,7 @@ func excludedUser(u *tb.User) bool {
 
 var excludedIDs = []int64{
 	-1001526889445,
+	-1001673858771,
 }
 
 func excludedChat(c *tb.Chat) bool {
